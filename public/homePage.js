@@ -1,0 +1,113 @@
+const { response } = require("express");
+
+const log = new LogoutButton;
+
+log.action = () =>{
+    ApiConnector.logout((response) => {
+    if (response.success){
+        location.reload();
+    }
+});
+}
+
+ApiConnector.сurrent = ((response) => {
+ if (response.success){
+    ProfileWidget.showProfile(response,data);
+ }
+});
+
+
+const rates = new RatesBoard;
+
+
+ApiConnector.getStocks = ((response) => {
+    if(response.success){
+        clearTable.fillTable(response.data);
+        setInterval(() =>{
+            rates.clearTable();
+            rates.fillTable(response.data);
+        },60000)
+    }
+});
+
+const money = new MoneyManager;
+
+money.addMoneyCallback = (data) => {
+    ApiConnector.addMoney(data,(response) =>{
+        if(response.success){
+            money.setMessage(true,"Пополнение баланса")
+        } else {
+            money.setMessage(false,response.error);
+        }
+    });
+}
+
+
+
+money.conversionMoneyCallback = (data) =>{
+    ApiConnector.ConconvertMoney(data,(response) => {
+        
+        if(response.success){
+           ProfileWidget.showProfile(response.data);
+           money.setMessage(true,"Конвертирование валют")
+        } else{
+           money.setMessage(false, response.error)
+        }
+    });
+
+}
+
+money.sendMoneyCallback = (data) =>{
+ ApiConnector.transferMoney (data, (response) =>{
+
+    if(response.success){
+        ProfileWidget.showProfile(response.data);
+        money.setMessage(true,"перевод валюты");
+    } else {
+        money.setMessage(false, response.error)
+    }
+
+});
+}
+
+
+const favorit = new FavoritesWidget;
+
+
+    ApiConnector.getFavorites (data, (response) =>{
+        if(response.success){
+            favorit.clearTable();
+            favorit.fillTable(response.data);
+            favorit.updateUsersList(resronse.data);
+        } 
+
+    });
+
+favorit.addUserCallback = (data) =>{
+
+    ApiConnector.addUserToFavorites (data, (response) =>{
+        if(response.success){
+            favorit.clearTable();
+            favorit.fillTable(response.data);
+            favorit.updateUsersList(response.data);
+            favorit.setMessage(true,"Добавлено в список избранного");
+        } else{
+            favorit.setMessage(false, response.error);
+        }
+
+    });
+}
+
+favorit.removeUserCallback = (data) =>{
+    ApiConnector.removeUserFromFavorites(data, (response) =>{
+            if(response.success){
+                favorit.clearTable();
+                favorit.fillTable(response.data);
+                favorit.updateUsersList(response.data);
+                favorit.setMessage(true,"удаление из избранного");
+            } else{
+                favorit.setMessage(false, response.error);
+            }
+    
+        });
+}
