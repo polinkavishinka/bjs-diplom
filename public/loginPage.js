@@ -3,8 +3,7 @@
 const user = new UserForm();
 
 user.loginFormCallback = (data) =>{
-    ApiConnector.login = (data, (response) => {
-        console.log(response);
+    ApiConnector.login (data, (response) => {
         if(response.success){
             location.reload();
         }
@@ -15,8 +14,7 @@ user.loginFormCallback = (data) =>{
 }
 
 user.registerFormCallback = (data) =>{
-    ApiConnector.register = (data, (response) => {
-        console.log(response);
+    ApiConnector.register (data, (response) => {
         if(response.success){
             location.reload();
         }
