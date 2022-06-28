@@ -10,24 +10,24 @@ log.action = () =>{
 });
 };
 
-ApiConnector.сurrent ((response) => {
- if (response.success){
-    ProfileWidget.showProfile(response.data);
- }
-});
+ApiConnector.current((response) => {
+    if (response.success) {
+      ProfileWidget.showProfile(response.data);
+    }
+  });
 
 
 const rates = new RatesBoard();
 
 ApiConnector.getStocks ((response) => {
     if(response.success){
-        rates.fillTable(response.data);
-        setInterval(() =>{
             rates.clearTable();
             rates.fillTable(response.data);
-        },60000)
-    }
-});
+        }
+    });
+
+setInterval (getStocks,60000)
+ 
 
 const money = new MoneyManager();
 
