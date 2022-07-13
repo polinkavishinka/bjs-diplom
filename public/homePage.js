@@ -12,22 +12,23 @@ log.action = () =>{
 
 ApiConnector.current((response) => {
     if (response.success) {
-      ProfileWidget.showProfile(response.data);
+        ProfileWidget.showProfile(response.data);
     }
-  });
-
+});
 
 const rates = new RatesBoard();
 
-ApiConnector.getStocks ((response) => {
-    if(response.success){
+function boardRates(rates) {
+    ApiConnector.getStocks ((response) => {
+        if(response.success){
             rates.clearTable();
             rates.fillTable(response.data);
-        }
-    });
+            }
+        });
+}
+boardRates (rates);
+setInterval (boardRates, 60000, rates);
 
-setInterval (getStocks,60000)
- 
 
 const money = new MoneyManager();
 
@@ -48,17 +49,17 @@ money.conversionMoneyCallback = (data) =>{
     ApiConnector.convertMoney(data,(response) => {
         
         if(response.success){
-           ProfileWidget.showProfile(response.data);
-           money.setMessage(true,"Конвертирование валют")
+        ProfileWidget.showProfile(response.data);
+        money.setMessage(true,"Конвертирование валют")
         } else{
-           money.setMessage(false, response.error)
+        money.setMessage(false, response.error)
         }
     });
 
 }
 
 money.sendMoneyCallback = (data) =>{
- ApiConnector.transferMoney(data, (response) =>{
+ApiConnector.transferMoney(data, (response) =>{
     if(response.success){
         ProfileWidget.showProfile(response.data);
         money.setMessage(true,"перевод валюты");
